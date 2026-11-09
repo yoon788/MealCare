@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <color name="mc_bg">#F6F8F7</color>
+    <color name="mc_white">#FFFFFF</color>
+    <color name="mc_text">#243C34</color>
+    <color name="mc_dark">#18382E</color>
+    <color name="mc_muted">#71857B</color>
+    <color name="mc_primary">#2F7864</color>
+    <color name="mc_primary_soft">#E5F2EB</color>
+    <color name="mc_line">#E3EAE6</color>
+    <color name="mc_gray">#98A9A1</color>
+    <color name="mc_amber">#AD782C</color>
+    <color name="mc_red">#B55B5B</color>
+    <color name="mc_blue">#5B8493</color>
+</resources>

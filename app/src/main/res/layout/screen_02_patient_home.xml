@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/mc_bg" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="MealCare" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="알림" android:textColor="@color/mc_primary" android:textSize="11sp" android:textStyle="bold" />
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2026년 11월 9일 월요일" android:textColor="@color/mc_muted" android:textSize="11sp" android:layout_marginBottom="5dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="김지민 환자님" android:textColor="@color/mc_text" android:textSize="23sp" android:textStyle="bold" android:layout_marginBottom="3dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="오늘의 기록을 확인해 보세요." android:textColor="@color/mc_muted" android:textSize="12sp" android:layout_marginBottom="12dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_user" android:tint="@color/mc_primary" android:contentDescription="user" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="보호자 연결 · 공유 설정" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="연결된 보호자에게 기록이 공유됩니다." android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="연결 관리" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_mint" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="7dp" android:layout_marginBottom="8dp">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_weight="1" android:padding="14dp">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_check" android:tint="@color/mc_primary" android:contentDescription="check" android:layout_marginEnd="8dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사 완료" android:textColor="@color/mc_text" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사를 마쳤어요" android:textColor="@color/mc_muted" android:textSize="11sp" android:layout_marginTop="3dp" />
+                </LinearLayout>
+                <Space android:layout_width="10dp" android:layout_height="1dp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_weight="1" android:padding="14dp">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_clock" android:tint="@color/mc_primary" android:contentDescription="clock" android:layout_marginEnd="8dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="결식" android:textColor="@color/mc_text" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사를 거르셨어요" android:textColor="@color/mc_muted" android:textSize="11sp" android:layout_marginTop="3dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="오늘의 식사 일정" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="기록 보기 ›" android:textColor="@color/mc_primary" android:textSize="11sp" android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_clock" android:tint="@color/mc_primary" android:contentDescription="clock" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="아침" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="08:00 · 기상 후 식사" android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="완료" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_mint" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_clock" android:tint="@color/mc_primary" android:contentDescription="clock" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="점심" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12:00 · 점심 식사" android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="완료" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_mint" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_clock" android:tint="@color/mc_primary" android:contentDescription="clock" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="저녁" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18:30 · 저녁 식사" android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="예정" android:textColor="@color/mc_muted" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_gray" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="오늘의 복약 일정" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="복약 관리 ›" android:textColor="@color/mc_primary" android:textSize="11sp" android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_pill" android:tint="@color/mc_primary" android:contentDescription="pill" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="약 A · 예시" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="아침 식후 30분 · 08:30" android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="예정" android:textColor="@color/mc_muted" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_gray" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_pill" android:tint="@color/mc_primary" android:contentDescription="pill" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="약 B · 예시" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="점심 식후 30분 · 12:30" android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="완료" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_mint" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="Auto Shift 안내" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="자세히 ›" android:textColor="@color/mc_primary" android:textSize="11sp" android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_blue" android:layout_marginTop="0dp" android:layout_marginBottom="12dp" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사 시간이 바뀌면 연결된 복약 알림을 조정할 수 있습니다. 알림 설정에서 확인하세요." android:textColor="@color/mc_muted" android:textSize="11sp" android:lineSpacingExtra="3dp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="보호자 기록 공유" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="공유 보기 ›" android:textColor="@color/mc_primary" android:textSize="11sp" android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:padding="12dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_icon_tile" android:padding="8dp">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_user" android:tint="@color/mc_primary" android:contentDescription="user" android:layout_marginEnd="0dp" />
+                    </LinearLayout>
+                    <Space android:layout_width="11dp" android:layout_height="1dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="환자 일상 기록" android:textColor="@color/mc_text" android:textSize="13sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사 완료 · 복약 · 결식 상태가 공유됩니다." android:textColor="@color/mc_muted" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="공유 중" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:background="@drawable/mc_chip_mint" android:paddingStart="9dp" android:paddingEnd="9dp" android:paddingTop="5dp" android:paddingBottom="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="64dp" android:orientation="horizontal" android:background="@color/mc_white" android:gravity="center_vertical">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_home" android:tint="@color/mc_primary" android:contentDescription="home" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="홈" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_pill" android:tint="@color/mc_gray" android:contentDescription="pill" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="복약 관리" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_chat" android:tint="@color/mc_gray" android:contentDescription="chat" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="커뮤니티" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_calendar" android:tint="@color/mc_gray" android:contentDescription="calendar" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="기록" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

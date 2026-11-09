@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string-array name="mc_post_categories">
+        <item>카테고리를 선택하세요</item>
+        <item>건강 정보</item>
+        <item>식사 이야기</item>
+        <item>복약 경험</item>
+        <item>생활 팁</item>
+        <item>자유 이야기</item>
+    </string-array>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/mc_bg" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="MealCare" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
+            <Space android:layout_width="1dp" android:layout_height="24dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="함께 챙기는&#10;식사와 복약 기록" android:textColor="@color/mc_text" android:textSize="27sp" android:textStyle="bold" android:layout_marginBottom="8dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="어떤 계정으로 시작할까요?&#10;나에게 맞는 홈에서 하루를 확인하세요." android:textColor="@color/mc_muted" android:textSize="13sp" android:layout_marginBottom="23dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="계정 유형 선택" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="10dp" android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/mc_ic_user" android:tint="@color/mc_primary" android:contentDescription="user" android:layout_marginEnd="8dp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="환자 계정" android:textColor="@color/mc_text" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1" />
+                    <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="false" android:buttonTint="@color/mc_primary" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="나의 식사·복약을 기록하고 일정을 확인해요." android:textColor="@color/mc_muted" android:textSize="12sp" android:layout_marginBottom="9dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_marginTop="0dp" android:layout_marginBottom="0dp" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사 완료 · 오늘의 복약 · 생활 기록" android:textColor="@color/mc_muted" android:textSize="11sp" android:lineSpacingExtra="3dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_outline" android:layout_marginTop="0dp" android:layout_marginBottom="10dp" android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/mc_ic_user" android:tint="@color/mc_primary" android:contentDescription="user" android:layout_marginEnd="8dp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="보호자 계정" android:textColor="@color/mc_text" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1" />
+                    <RadioButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:buttonTint="@color/mc_primary" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="연결된 환자의 기록을 보고 필요한 알림을 받아요." android:textColor="@color/mc_muted" android:textSize="12sp" android:layout_marginBottom="9dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_marginTop="0dp" android:layout_marginBottom="0dp" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="보호자 홈 · 환자의 식사·복약 현황" android:textColor="@color/mc_muted" android:textSize="11sp" android:lineSpacingExtra="3dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_blue" android:layout_marginTop="0dp" android:layout_marginBottom="12dp" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="환자와 보호자는 초대 코드를 통해 연결할 수 있습니다. 개인정보 공유 범위를 확인하세요." android:textColor="@color/mc_muted" android:textSize="11sp" android:lineSpacingExtra="3dp" />
+            </LinearLayout>
+            <Space android:layout_width="1dp" android:layout_height="12dp" />
+            <Button android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:text="보호자 계정으로 시작하기" android:textAllCaps="false" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/mc_white" android:backgroundTint="@color/mc_primary" android:minHeight="0dp" />
+            <Button android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:text="이미 계정이 있어요 · 로그인" android:textAllCaps="false" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/mc_primary" android:backgroundTint="@color/mc_primary_soft" android:minHeight="0dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/mc_bg" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp">
+        <ImageView android:layout_width="21dp" android:layout_height="21dp" android:src="@drawable/mc_ic_back" android:tint="@color/mc_dark" android:contentDescription="back" android:layout_marginEnd="14dp" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="주간 통계" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+    </LinearLayout>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2026.10.26 – 2026.11.01" android:textColor="@color/mc_text" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="6dp" android:gravity="center" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="이번 주의 식사와 복약 기록을 확인하세요." android:textColor="@color/mc_muted" android:textSize="11sp" android:layout_marginBottom="12dp" android:gravity="center" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_weight="1" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사 완료" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginBottom="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="14회" android:textColor="@color/mc_primary" android:textSize="19sp" android:textStyle="bold" />
+                </LinearLayout>
+                <Space android:layout_width="8dp" android:layout_height="1dp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_weight="1" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="복약 확인" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginBottom="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7회" android:textColor="@color/mc_primary" android:textSize="19sp" android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+            <Space android:layout_width="1dp" android:layout_height="12dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="날짜별 식사·복약 기록" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="주간 기록" android:textColor="@color/mc_primary" android:textSize="11sp" android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="12dp" android:padding="14dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="요일" android:textColor="@color/mc_muted" android:textSize="11sp" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="식사" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="복약" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="월" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="화" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●●●" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="수" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="목" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="금" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●●●" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="토" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="일" android:textColor="@color/mc_text" android:textSize="12sp" android:textStyle="bold" android:layout_weight="1" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="88dp" android:layout_height="wrap_content" android:text="●○" android:textColor="@color/mc_primary" android:textSize="12sp" android:gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="주간 통계 요약" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_weight="1" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="식사 성공" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginBottom="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="14회" android:textColor="@color/mc_primary" android:textSize="19sp" android:textStyle="bold" />
+                </LinearLayout>
+                <Space android:layout_width="8dp" android:layout_height="1dp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_warning" android:layout_weight="1" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="결식" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginBottom="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2회" android:textColor="@color/mc_text" android:textSize="19sp" android:textStyle="bold" />
+                </LinearLayout>
+                <Space android:layout_width="8dp" android:layout_height="1dp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_mint" android:layout_weight="1" android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="복약 완료" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginBottom="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7회" android:textColor="@color/mc_primary" android:textSize="19sp" android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+            <Space android:layout_width="1dp" android:layout_height="13dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="요일별 식사 이행률" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginTop="0dp" android:layout_marginBottom="12dp" android:padding="14dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="월" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="67" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 67%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="화" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="100" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 100%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="수" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="67" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 67%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="목" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="33" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 33%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="금" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="100" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 100%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="토" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="67" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 67%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="35dp" android:layout_height="wrap_content" android:text="일" android:textColor="@color/mc_text" android:textSize="11sp" />
+                    <ProgressBar android:layout_width="0dp" android:layout_height="9dp" android:layout_weight="1" android:max="100" android:progress="33" android:progressTint="@color/mc_primary" android:progressBackgroundTint="@color/mc_line" style="?android:attr/progressBarStyleHorizontal" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text=" 33%" android:textColor="@color/mc_muted" android:textSize="11sp" android:gravity="end" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_blue" android:layout_marginTop="0dp" android:layout_marginBottom="12dp" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="주간 통계는 입력된 기록을 바탕으로 계산합니다. 샘플 수치는 실제 데이터와 다를 수 있습니다." android:textColor="@color/mc_muted" android:textSize="11sp" android:lineSpacingExtra="3dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="64dp" android:orientation="horizontal" android:background="@color/mc_white" android:gravity="center_vertical">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_home" android:tint="@color/mc_gray" android:contentDescription="home" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="홈" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_pill" android:tint="@color/mc_gray" android:contentDescription="pill" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="복약 관리" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_chat" android:tint="@color/mc_gray" android:contentDescription="chat" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="커뮤니티" android:textColor="@color/mc_muted" android:textSize="10sp" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_weight="1" android:padding="4dp">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/mc_ic_calendar" android:tint="@color/mc_primary" android:contentDescription="calendar" android:layout_marginEnd="0dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="기록" android:textColor="@color/mc_primary" android:textSize="10sp" android:textStyle="bold" android:layout_marginTop="4dp" android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
