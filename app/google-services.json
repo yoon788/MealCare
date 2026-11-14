@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "174648580534",
+    "project_id": "mealcare-84d8a",
+    "storage_bucket": "mealcare-84d8a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174648580534:android:78d1d6765d71411af70917",
+        "android_client_info": {
+          "package_name": "com.example.mealcare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2sJSj48tiGEVnnwt5-lQ8tvOif2uFCc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
