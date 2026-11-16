@@ -1,0 +1,97 @@
+erDiagram
+%% MealCare - 설계 ERD (관계 및 키 중심)
+%% 회원은 환자/보호자 역할을 갖는 공통 엔터티입니다.
+%% FK는 설계상 참조이며 Firestore가 자동 강제하지 않습니다.
+%% 실선: 식별자에 부모 ID를 사용. 점선: 일반 참조.
+%% 모든 다수 관계는 0..N입니다. usedByUid, revokedByUid는 0..1 회원 참조입니다.
+%% 연결: linkId = encode(patientUid, caregiverUid).
+%% 복약 기록: recordId = encode(planId, slotId, scheduleDate).
+%% 식사 기록: recordId = encode(mealPlanId, scheduleDate).
+%% planVersion은 기록 식별자에 포함하지 않습니다.
+%% 복약계획과 식사계획의 선택적 N:M은 doseSlots[].mealPlanId로 구현합니다.
+%% 각 복용회차는 fixed이면 식사 참조 0개, mealRelative이면 같은 환자의 식사계획 1개를 참조합니다.
+%% 초대 사용과 연결 생성/재활성화는 원자적 업무 흐름이며 직접 FK는 현재 정의하지 않았습니다.
+%% 공개프로필은 회원의 분리 저장이므로 별도 업무 엔터티로 추가하지 않았습니다.
+%% 버전/수정이력 및 스냅샷은 본 다이어그램의 10개 핵심 엔터티 밖의 보조 저장 구조입니다.
+%% 식사기록은 현재 환자만 작성/수정할 수 있으며, 작성/수정자 FK는 그 제약과 별도로 표시합니다.
+%% 따봉 지피티야 고마워
+
+    direction LR
+
+    member["회원"] {
+        string uid PK
+        string role
+    }
+    careLink["환자-보호자 연결"] {
+        string linkId PK "두 회원 UID 조합"
+        string patientUid FK
+        string caregiverUid FK
+        string revokedByUid FK "선택"
+    }
+    invite["초대"] {
+        string inviteId PK "초대 코드 해시"
+        string patientUid FK
+        string usedByUid FK "사용 전 비어 있음"
+    }
+    drug["약품"] {
+        string drugId PK
+        string productName
+    }
+    medicationPlan["복약 계획"] {
+        string planId PK
+        string patientUid FK
+        string drugId FK
+        json doseSlots "회차별 선택적 mealPlanId 참조"
+    }
+    mealPlan["식사 계획"] {
+        string mealPlanId PK
+        string patientUid FK
+        string mealType
+    }
+    medicationRecord["복약 기록"] {
+        string recordId PK "planId + slotId + scheduleDate"
+        string patientUid FK
+        string planId FK
+        string slotId
+        date scheduleDate
+        string createdByUid FK
+        string updatedByUid FK
+    }
+    mealRecord["식사 기록"] {
+        string recordId PK "mealPlanId + scheduleDate"
+        string patientUid FK
+        string mealPlanId FK
+        date scheduleDate
+        string createdByUid FK
+        string updatedByUid FK
+    }
+    post["게시글"] {
+        string postId PK
+        string authorUid FK
+    }
+    comment["댓글"] {
+        string commentId PK
+        string postId FK
+        string authorUid FK
+    }
+
+    member ||--o{ careLink : "환자 patientUid"
+    member ||--o{ careLink : "보호자 caregiverUid"
+    member |o..o{ careLink : "해제자 revokedByUid"
+    member ||..o{ invite : "발급 patientUid"
+    member |o..o{ invite : "사용 usedByUid"
+    member ||..o{ medicationPlan : "소유 patientUid"
+    member ||..o{ mealPlan : "소유 patientUid"
+    drug ||..o{ medicationPlan : "약품 drugId"
+    medicationPlan ||--o{ medicationRecord : "계획 planId"
+    mealPlan ||--o{ mealRecord : "계획 mealPlanId"
+    mealPlan }o..o{ medicationPlan : "회차별 선택적 식사연동"
+    member ||..o{ medicationRecord : "대상 patientUid"
+    member ||..o{ medicationRecord : "최초작성 createdByUid"
+    member ||..o{ medicationRecord : "최종수정 updatedByUid"
+    member ||..o{ mealRecord : "대상 patientUid"
+    member ||..o{ mealRecord : "최초작성 createdByUid"
+    member ||..o{ mealRecord : "최종수정 updatedByUid"
+    member ||..o{ post : "작성 authorUid"
+    post ||..o{ comment : "소속 postId"
+    member ||..o{ comment : "작성 authorUid"
