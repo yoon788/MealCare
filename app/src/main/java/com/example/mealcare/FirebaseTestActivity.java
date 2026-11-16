@@ -21,6 +21,7 @@ public class FirebaseTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //잘 실행된다. 실행 -> log -> FirebaseTest 확인
+        //김태희 커밋 테스트
         FirebaseFirestore.getInstance()
                 .document("connection_test/ping")
                 .get(Source.SERVER)
