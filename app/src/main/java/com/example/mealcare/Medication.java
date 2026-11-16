@@ -21,4 +21,4 @@ public class Medication {
 
     public Medication() {}              // Firestore가 문서를 객체로 바꿀 때 필요
 }
-}
+
