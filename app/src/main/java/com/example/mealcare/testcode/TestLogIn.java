@@ -1,4 +1,4 @@
-package com.example.mealcare;
+package com.example.mealcare.testcode;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mealcare.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+//!!경고!! 진짜 로그인 용도로 쓰는 코드 아님. 오히려 로그인 데이터를 데이터베이스에 올리는 코드가 더 맞음!!//
+//!!절대 이 코드를 사용해 시제품을 만들지 말 것!!//
 
 //Firebase store의 User에 데이터를 추가하는 코드. 테스트 용이며 지피티로 짬. 어떻게 작동하는지 버튼 빼고 모름
 //https://console.firebase.google.com/u/3/project/mealcare-84d8a/authentication/users
