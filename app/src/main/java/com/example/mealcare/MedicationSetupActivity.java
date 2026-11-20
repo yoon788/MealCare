@@ -5,83 +5,74 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.mealcare.data.CurrentUser;
-import com.example.mealcare.data.MedicationRepository;
+import com.example.mealcare.databinding.Screen07MedicationSetupBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class MedicationSetupActivity extends AppCompatActivity {
 
-    private EditText etMedName, etOffsetMinutes, etRepeatInterval, etAlarmTime, etRepeatSchedule;
-    private TextView tvSelectedMed, chipBeforeMeal, chipAfterMeal, chipNoMeal;
-    private CheckBox cbBreakfast, cbLunch, cbDinner;
-    private Switch swAlarm;
-
+    private Screen07MedicationSetupBinding b;
+    private FirebaseFirestore db;
     private String conditionType = Medication.AFTER_MEAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.screen_07_medication_setup);
+        b = Screen07MedicationSetupBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
 
-        etMedName = findViewById(R.id.etMedName);
-        etOffsetMinutes = findViewById(R.id.etOffsetMinutes);
-        etRepeatInterval = findViewById(R.id.etRepeatInterval);
-        etAlarmTime = findViewById(R.id.etAlarmTime);
-        etRepeatSchedule = findViewById(R.id.etRepeatSchedule);
-        tvSelectedMed = findViewById(R.id.tvSelectedMed);
-        chipBeforeMeal = findViewById(R.id.chipBeforeMeal);
-        chipAfterMeal = findViewById(R.id.chipAfterMeal);
-        chipNoMeal = findViewById(R.id.chipNoMeal);
-        cbBreakfast = findViewById(R.id.cbBreakfast);
-        cbLunch = findViewById(R.id.cbLunch);
-        cbDinner = findViewById(R.id.cbDinner);
-        swAlarm = findViewById(R.id.swAlarm);
+        db = FirebaseFirestore.getInstance();
 
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-        findViewById(R.id.btnSave).setOnClickListener(v -> save());
-        chipBeforeMeal.setOnClickListener(v -> selectCondition(Medication.BEFORE_MEAL));
-        chipAfterMeal.setOnClickListener(v -> selectCondition(Medication.AFTER_MEAL));
-        chipNoMeal.setOnClickListener(v -> selectCondition(Medication.FIXED_TIME));
-        etAlarmTime.setOnClickListener(v -> showTimePicker());
+        b.btnBack.setOnClickListener(v -> finish());
+        b.btnSave.setOnClickListener(v -> saveMedication());
+        b.chipBeforeMeal.setOnClickListener(v -> selectCondition(Medication.BEFORE_MEAL));
+        b.chipAfterMeal.setOnClickListener(v -> selectCondition(Medication.AFTER_MEAL));
+        b.chipNoMeal.setOnClickListener(v -> selectCondition(Medication.FIXED_TIME));
+        b.etAlarmTime.setOnClickListener(v -> showTimePicker());
 
-        // 입력한 약 이름을 아래 "등록할 약" 줄에 바로 반영
-        tvSelectedMed.setText("등록할 약 · 이름을 입력하세요");
-        etMedName.addTextChangedListener(new TextWatcher() {
+        b.tvSelectedMed.setText("등록할 약 · 이름을 입력하세요");
+        b.etMedName.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override public void afterTextChanged(Editable s) {
-                tvSelectedMed.setText("등록할 약 · " + s.toString().trim());
+                b.tvSelectedMed.setText("등록할 약 · " + s.toString().trim());
             }
         });
 
         selectCondition(Medication.AFTER_MEAL);
     }
 
+    // 로그인 전에는 테스트용 uid 사용
+    private String getUid() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return user != null ? user.getUid() : "test-patient";
+    }
+
     private void selectCondition(String type) {
         conditionType = type;
-        styleChip(chipBeforeMeal, Medication.BEFORE_MEAL.equals(type));
-        styleChip(chipAfterMeal, Medication.AFTER_MEAL.equals(type));
-        styleChip(chipNoMeal, Medication.FIXED_TIME.equals(type));
+        styleChip(b.chipBeforeMeal, Medication.BEFORE_MEAL.equals(type));
+        styleChip(b.chipAfterMeal, Medication.AFTER_MEAL.equals(type));
+        styleChip(b.chipNoMeal, Medication.FIXED_TIME.equals(type));
 
         // 식사 무관이면 끼니·N분 대신 알림 시각을 직접 고른다
         boolean fixed = Medication.FIXED_TIME.equals(type);
-        cbBreakfast.setEnabled(!fixed);
-        cbLunch.setEnabled(!fixed);
-        cbDinner.setEnabled(!fixed);
-        etOffsetMinutes.setEnabled(!fixed);
-        etAlarmTime.setEnabled(fixed);
-        etAlarmTime.setHint(fixed ? "눌러서 시각 선택" : "식사 시간 기준으로 자동 계산");
+        b.cbBreakfast.setEnabled(!fixed);
+        b.cbLunch.setEnabled(!fixed);
+        b.cbDinner.setEnabled(!fixed);
+        b.etOffsetMinutes.setEnabled(!fixed);
+        b.etAlarmTime.setEnabled(fixed);
+        b.etAlarmTime.setHint(fixed ? "눌러서 시각 선택" : "식사 시간 기준으로 자동 계산");
     }
 
     private void styleChip(TextView chip, boolean selected) {
@@ -92,12 +83,12 @@ public class MedicationSetupActivity extends AppCompatActivity {
 
     private void showTimePicker() {
         new TimePickerDialog(this, (view, hour, minute) ->
-                etAlarmTime.setText(String.format(Locale.KOREA, "%02d:%02d", hour, minute)),
+                b.etAlarmTime.setText(String.format(Locale.KOREA, "%02d:%02d", hour, minute)),
                 12, 0, true).show();
     }
 
-    private void save() {
-        String name = etMedName.getText().toString().trim();
+    private void saveMedication() {
+        String name = b.etMedName.getText().toString().trim();
         if (name.isEmpty()) {
             toast("약 이름을 입력하세요");
             return;
@@ -109,34 +100,37 @@ public class MedicationSetupActivity extends AppCompatActivity {
         m.mealSlots = new ArrayList<>();
 
         if (Medication.FIXED_TIME.equals(conditionType)) {
-            m.fixedTime = etAlarmTime.getText().toString();
+            m.fixedTime = b.etAlarmTime.getText().toString();
             if (m.fixedTime.isEmpty()) {
                 toast("알림 시각을 선택하세요");
                 return;
             }
         } else {
-            if (cbBreakfast.isChecked()) m.mealSlots.add(MealSlot.BREAKFAST);
-            if (cbLunch.isChecked()) m.mealSlots.add(MealSlot.LUNCH);
-            if (cbDinner.isChecked()) m.mealSlots.add(MealSlot.DINNER);
+            if (b.cbBreakfast.isChecked()) m.mealSlots.add(MealSlot.BREAKFAST);
+            if (b.cbLunch.isChecked()) m.mealSlots.add(MealSlot.LUNCH);
+            if (b.cbDinner.isChecked()) m.mealSlots.add(MealSlot.DINNER);
             if (m.mealSlots.isEmpty()) {
                 toast("대상 식사를 하나 이상 선택하세요");
                 return;
             }
-            m.offsetMinutes = parseInt(etOffsetMinutes, -1);
+            m.offsetMinutes = parseInt(b.etOffsetMinutes, -1);
             if (m.offsetMinutes < 0) {
                 toast("복용 시간을 분 단위 숫자로 입력하세요");
                 return;
             }
         }
 
-        m.alarmEnabled = swAlarm.isChecked();
-        m.repeatIntervalMinutes = parseInt(etRepeatInterval, 0);
-        String schedule = etRepeatSchedule.getText().toString().trim();
+        m.alarmEnabled = b.swAlarm.isChecked();
+        m.repeatIntervalMinutes = parseInt(b.etRepeatInterval, 0);
+        String schedule = b.etRepeatSchedule.getText().toString().trim();
         m.repeatSchedule = schedule.isEmpty() ? "매일" : schedule;
-        // Auto Shift는 식후 약에만 적용 (식전·고정 시각 약은 제외)
+        // Auto Shift는 식후 약에만 적용
         m.autoShiftAllowed = Medication.AFTER_MEAL.equals(conditionType);
 
-        new MedicationRepository(CurrentUser.uid()).add(m)
+        // users/{uid}/medications 에 저장
+        db.collection("users").document(getUid())
+                .collection("medications")
+                .add(m)
                 .addOnSuccessListener(ref -> {
                     toast("약이 등록되었습니다");
                     finish();
