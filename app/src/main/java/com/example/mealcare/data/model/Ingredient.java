@@ -6,8 +6,7 @@ public class Ingredient {
     private String unit;   // 함량 단위. 예: "mg"
     private String basis;  // 함량의 기준. 예: "1정"
 
-    public Ingredient() {
-    }
+    public Ingredient() {}
 
     public String getName() {
         return name;

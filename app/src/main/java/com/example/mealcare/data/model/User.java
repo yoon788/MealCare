@@ -1,15 +1,14 @@
 package com.example.mealcare.data.model;
-import java.util.List;
 import com.google.firebase.Timestamp;
 
 public class User {
     public String uid; //기본키, 유저 식별용
-    public List<String> role; //환자인가, 보호자인가?
+    public String role; //환자인가, 보호자인가?
     public String nickname; //커뮤니티 닉네임
     public String profileImagePath; //프로필 사진 경로
-    public List<String> status; // active, suspended, withdrawn
+    public String status; // active, suspended, withdrawn
     public Timestamp createdAt; //가입 시각
-    public Timestamp updateAt; //수정 시각
+    public Timestamp updatedAt; //수정 시각
 
     public User() {};
 
@@ -17,7 +16,7 @@ public class User {
         return uid;
     }
 
-    public List<String> getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -29,7 +28,7 @@ public class User {
         return profileImagePath;
     }
 
-    public List<String> getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -37,15 +36,15 @@ public class User {
         return createdAt;
     }
 
-    public Timestamp getUpdateAt() {
-        return updateAt;
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
     }
 
     public void setUid(String uid) {
         this.uid = uid;
     }
 
-    public void setRole(List<String> role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -57,7 +56,7 @@ public class User {
         this.profileImagePath = profileImagePath;
     }
 
-    public void setStatus(List<String> status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -65,7 +64,7 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public void setUpdateAt(Timestamp updateAt) {
-        this.updateAt = updateAt;
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
