@@ -23,12 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- 2번 기능 (윤지원): 회원가입·홈·보호자 연결 -->
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
@@ -39,6 +39,16 @@
         <activity
             android:name=".LinkPatientActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 팀원 화면 -->
+        <activity
+            android:name=".FirebaseTestActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".MedicationSetupActivity"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize" />
     </application>
 
