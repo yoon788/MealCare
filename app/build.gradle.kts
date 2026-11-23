@@ -1,7 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
 }
+
+val mfdsApiKey = Properties().apply {
+    val propertiesFile = rootProject.file("local.properties")
+    if (propertiesFile.isFile) {
+        propertiesFile.inputStream().use { load(it) }
+    }
+}.getProperty("MFDS_API_KEY", "").trim()
+val mfdsApiKeyLiteral = "\"${mfdsApiKey.replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
 android {
     namespace = "com.example.mealcare"
@@ -17,6 +27,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = file("schemas").absolutePath
+            }
+        }
+        buildConfigField("String", "MFDS_API_KEY", mfdsApiKeyLiteral)
     }
 
     buildTypes {
@@ -33,10 +49,14 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
+    sourceSets.getByName("androidTest").assets.directories.add("schemas")
 }
 
 dependencies {
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
@@ -47,4 +67,5 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:35.1.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-functions")
 }

@@ -1,0 +1,244 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "303e0281de3876d7344c32fee1f1f227",
+    "entities": [
+      {
+        "tableName": "medication_plans",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`patientUid` TEXT NOT NULL, `planId` TEXT NOT NULL, `drugId` TEXT NOT NULL, `drugName` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `timeZone` TEXT NOT NULL, `status` TEXT NOT NULL, `version` INTEGER NOT NULL, `alarmEnabled` INTEGER NOT NULL, `repeatIntervalMinutes` INTEGER NOT NULL, `maxRepeatCount` INTEGER NOT NULL, PRIMARY KEY(`patientUid`, `planId`))",
+        "fields": [
+          {
+            "fieldPath": "patientUid",
+            "columnName": "patientUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "planId",
+            "columnName": "planId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "drugId",
+            "columnName": "drugId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "drugName",
+            "columnName": "drugName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "endDate",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "timeZone",
+            "columnName": "timeZone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alarmEnabled",
+            "columnName": "alarmEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "repeatIntervalMinutes",
+            "columnName": "repeatIntervalMinutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxRepeatCount",
+            "columnName": "maxRepeatCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "patientUid",
+            "planId"
+          ]
+        }
+      },
+      {
+        "tableName": "dose_slots",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`patientUid` TEXT NOT NULL, `planId` TEXT NOT NULL, `slotId` TEXT NOT NULL, `doseAmount` REAL NOT NULL, `doseUnit` TEXT NOT NULL, `weekdaysMask` INTEGER NOT NULL, `timingType` TEXT NOT NULL, `localTime` TEXT, `mealPlanId` TEXT, `offsetMinutes` INTEGER, PRIMARY KEY(`patientUid`, `planId`, `slotId`), FOREIGN KEY(`patientUid`, `planId`) REFERENCES `medication_plans`(`patientUid`, `planId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "patientUid",
+            "columnName": "patientUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "planId",
+            "columnName": "planId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "slotId",
+            "columnName": "slotId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "doseAmount",
+            "columnName": "doseAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "doseUnit",
+            "columnName": "doseUnit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekdaysMask",
+            "columnName": "weekdaysMask",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timingType",
+            "columnName": "timingType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localTime",
+            "columnName": "localTime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "mealPlanId",
+            "columnName": "mealPlanId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "offsetMinutes",
+            "columnName": "offsetMinutes",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "patientUid",
+            "planId",
+            "slotId"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "medication_plans",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "patientUid",
+              "planId"
+            ],
+            "referencedColumns": [
+              "patientUid",
+              "planId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "meal_times",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`patientUid` TEXT NOT NULL, `mealPlanId` TEXT NOT NULL, `dayOfWeek` INTEGER NOT NULL, `localTime` TEXT NOT NULL, `timeZone` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT, `status` TEXT NOT NULL, PRIMARY KEY(`patientUid`, `mealPlanId`, `dayOfWeek`))",
+        "fields": [
+          {
+            "fieldPath": "patientUid",
+            "columnName": "patientUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealPlanId",
+            "columnName": "mealPlanId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dayOfWeek",
+            "columnName": "dayOfWeek",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localTime",
+            "columnName": "localTime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeZone",
+            "columnName": "timeZone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "endDate",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "patientUid",
+            "mealPlanId",
+            "dayOfWeek"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '303e0281de3876d7344c32fee1f1f227')"
+    ]
+  }
+}
