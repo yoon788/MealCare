@@ -1,83 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="회원가입"
-            android:textSize="26sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="이메일"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="비밀번호 (6자 이상)"
-            android:inputType="textPassword" />
-
-        <EditText
-            android:id="@+id/etPasswordConfirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="비밀번호 확인"
-            android:inputType="textPassword" />
-
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="이름"
-            android:inputType="textPersonName" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="사용자 유형" />
-
-        <RadioGroup
-            android:id="@+id/rgRole"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rbPatient"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:text="환자" />
-
-            <RadioButton
-                android:id="@+id/rbGuardian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="보호자" />
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btnSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="가입하기" />
-
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/mc_bg" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp">
+        <ImageView android:id="@+id/btnBack" android:layout_width="21dp" android:layout_height="21dp" android:src="@drawable/mc_ic_back" android:tint="@color/mc_dark" android:contentDescription="back" android:layout_marginEnd="14dp" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="회원가입" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
     </LinearLayout>
-</ScrollView>
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mc_line" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
+            <Space android:layout_width="1dp" android:layout_height="14dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="어떤 계정으로 시작할까요?" android:textColor="@color/mc_text" android:textSize="22sp" android:textStyle="bold" android:layout_marginBottom="7dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="나에게 맞는 홈에서 하루를 확인하세요." android:textColor="@color/mc_muted" android:textSize="12sp" android:layout_marginBottom="18dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="계정 유형 선택" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/cardPatient" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_outline" android:layout_marginBottom="10dp" android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/mc_ic_user" android:tint="@color/mc_primary" android:contentDescription="user" android:layout_marginEnd="8dp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="환자 계정" android:textColor="@color/mc_text" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1" />
+                    <RadioButton android:id="@+id/rbPatient" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:clickable="false" android:focusable="false" android:buttonTint="@color/mc_primary" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="나의 식사·복약을 기록하고 일정을 확인해요." android:textColor="@color/mc_muted" android:textSize="12sp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/cardGuardian" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card" android:layout_marginBottom="18dp" android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/mc_ic_user" android:tint="@color/mc_primary" android:contentDescription="user" android:layout_marginEnd="8dp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="보호자 계정" android:textColor="@color/mc_text" android:textSize="15sp" android:textStyle="bold" android:layout_weight="1" />
+                    <RadioButton android:id="@+id/rbGuardian" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="false" android:clickable="false" android:focusable="false" android:buttonTint="@color/mc_primary" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="연결된 환자의 기록을 보고 필요한 알림을 받아요." android:textColor="@color/mc_muted" android:textSize="12sp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="계정 정보" android:textColor="@color/mc_text" android:textSize="16sp" android:textStyle="bold" android:layout_weight="1" />
+            </LinearLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="이름" android:textColor="@color/mc_muted" android:textSize="12sp" android:textStyle="bold" android:layout_marginBottom="6dp" />
+            <EditText android:id="@+id/etName" android:layout_width="match_parent" android:layout_height="52dp" android:background="@drawable/mc_field" android:paddingStart="14dp" android:paddingEnd="14dp" android:textSize="14sp" android:textColor="@color/mc_text" android:textColorHint="@color/mc_muted" android:hint="예: 김지민" android:inputType="textPersonName" android:gravity="center_vertical" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="이메일" android:textColor="@color/mc_muted" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="14dp" android:layout_marginBottom="6dp" />
+            <EditText android:id="@+id/etEmail" android:layout_width="match_parent" android:layout_height="52dp" android:background="@drawable/mc_field" android:paddingStart="14dp" android:paddingEnd="14dp" android:textSize="14sp" android:textColor="@color/mc_text" android:textColorHint="@color/mc_muted" android:hint="example@mealcare.com" android:inputType="textEmailAddress" android:gravity="center_vertical" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="비밀번호" android:textColor="@color/mc_muted" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="14dp" android:layout_marginBottom="6dp" />
+            <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="52dp" android:background="@drawable/mc_field" android:paddingStart="14dp" android:paddingEnd="14dp" android:textSize="14sp" android:textColor="@color/mc_text" android:textColorHint="@color/mc_muted" android:hint="6자 이상" android:inputType="textPassword" android:gravity="center_vertical" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="비밀번호 확인" android:textColor="@color/mc_muted" android:textSize="12sp" android:textStyle="bold" android:layout_marginTop="14dp" android:layout_marginBottom="6dp" />
+            <EditText android:id="@+id/etPasswordConfirm" android:layout_width="match_parent" android:layout_height="52dp" android:background="@drawable/mc_field" android:paddingStart="14dp" android:paddingEnd="14dp" android:textSize="14sp" android:textColor="@color/mc_text" android:textColorHint="@color/mc_muted" android:hint="비밀번호 다시 입력" android:inputType="textPassword" android:gravity="center_vertical" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/mc_card_blue" android:layout_marginTop="18dp" android:layout_marginBottom="12dp" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="환자와 보호자는 초대 코드를 통해 연결할 수 있습니다. 개인정보 공유 범위를 확인하세요." android:textColor="@color/mc_muted" android:textSize="11sp" android:lineSpacingExtra="3dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@color/mc_bg" android:padding="14dp">
+        <Button android:id="@+id/btnSignUp" android:layout_width="match_parent" android:layout_height="48dp" android:text="환자 계정으로 시작하기" android:textAllCaps="false" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/mc_white" android:backgroundTint="@color/mc_primary" android:minHeight="0dp" />
+    </LinearLayout>
+</LinearLayout>

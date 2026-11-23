@@ -5,7 +5,8 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +26,10 @@ import java.util.Map;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword, etPasswordConfirm, etName;
-    private RadioGroup rgRole;
+    private LinearLayout cardPatient, cardGuardian;
+    private RadioButton rbPatient, rbGuardian;
     private Button btnSignUp;
+    private String role = "patient";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,29 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etPasswordConfirm = findViewById(R.id.etPasswordConfirm);
         etName = findViewById(R.id.etName);
-        rgRole = findViewById(R.id.rgRole);
+        cardPatient = findViewById(R.id.cardPatient);
+        cardGuardian = findViewById(R.id.cardGuardian);
+        rbPatient = findViewById(R.id.rbPatient);
+        rbGuardian = findViewById(R.id.rbGuardian);
         btnSignUp = findViewById(R.id.btnSignUp);
 
+        // 계정 유형 카드를 누르면 선택 (screen_01 계정 유형 선택 디자인)
+        cardPatient.setOnClickListener(v -> selectRole("patient"));
+        cardGuardian.setOnClickListener(v -> selectRole("guardian"));
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         btnSignUp.setOnClickListener(v -> signUp());
+
+        selectRole("patient");
+    }
+
+    private void selectRole(String newRole) {
+        role = newRole;
+        boolean isPatient = "patient".equals(role);
+        rbPatient.setChecked(isPatient);
+        rbGuardian.setChecked(!isPatient);
+        cardPatient.setBackgroundResource(isPatient ? R.drawable.mc_card_outline : R.drawable.mc_card);
+        cardGuardian.setBackgroundResource(isPatient ? R.drawable.mc_card : R.drawable.mc_card_outline);
+        btnSignUp.setText(isPatient ? "환자 계정으로 시작하기" : "보호자 계정으로 시작하기");
     }
 
     private void signUp() {
@@ -48,11 +70,10 @@ public class SignUpActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
         String confirm = etPasswordConfirm.getText().toString();
         String name = etName.getText().toString().trim();
-        int checkedId = rgRole.getCheckedRadioButtonId();
 
         // 입력 검사
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(name)) {
-            toast("모든 칸을 입력을 주세요.");
+            toast("모든 칸을 입력해 주세요.");
             return;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -60,18 +81,13 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         if (password.length() < 6) {
-            toast("비밀번호는 6자 이상으로 설정 가능합니다.");
+            toast("비밀번호는 6자 이상이어야 합니다.");
             return;
         }
         if (!password.equals(confirm)) {
             toast("비밀번호가 서로 다릅니다.");
             return;
         }
-        if (checkedId == -1) {
-            toast("환자 / 보호자 중 하나를 선택해 주세요.");
-            return;
-        }
-        String role = (checkedId == R.id.rbGuardian) ? "guardian" : "patient";
 
         btnSignUp.setEnabled(false);
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -81,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (e instanceof FirebaseAuthUserCollisionException) {
                         toast("이미 가입된 이메일입니다.");
                     } else if (e instanceof FirebaseAuthWeakPasswordException) {
-                        toast("비밀번호가 취약합니다.");
+                        toast("비밀번호가 너무 약합니다.");
                     } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
                         toast("이메일 형식이 올바르지 않습니다.");
                     } else {
@@ -101,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity {
                 .collection("users").document(user.getUid())
                 .set(data)
                 .addOnSuccessListener(unused -> {
-                    toast("가입 완료!");
+                    toast("가입이 완료되었습니다.");
                     AuthRouter.goHome(this, user.getUid(), () -> btnSignUp.setEnabled(true));
                 })
                 .addOnFailureListener(e -> {
