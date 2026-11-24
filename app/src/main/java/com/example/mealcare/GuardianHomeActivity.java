@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mealcare.data.UserRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +22,7 @@ import java.util.Locale;
 /** 보호자 홈 (screen_03 디자인): 이름·날짜 표시, 연결된 환자, 환자 연결(코드 입력), 로그아웃 */
 public class GuardianHomeActivity extends AppCompatActivity {
 
+    private final UserRepository users = new UserRepository();
     private FirebaseFirestore db;
     private String uid;
     private TextView tvWelcome, tvPatients, btnLink;
@@ -43,8 +45,8 @@ public class GuardianHomeActivity extends AppCompatActivity {
                 startActivity(new Intent(this, LinkPatientActivity.class)));
         findViewById(R.id.btnLogout).setOnClickListener(v -> AuthRouter.logout(this));
 
-        db.collection("users").document(uid).get().addOnSuccessListener(doc ->
-                tvWelcome.setText(doc.getString("name") + "님, 안녕하세요"));
+        users.getNickname(uid).addOnSuccessListener(name ->
+                tvWelcome.setText(name + "님, 안녕하세요"));
     }
 
     @Override
@@ -61,15 +63,11 @@ public class GuardianHomeActivity extends AppCompatActivity {
                         btnLink.setText("연결하기");
                         return;
                     }
-                    List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+                    List<Task<String>> tasks = new ArrayList<>();
                     for (DocumentSnapshot link : qs.getDocuments()) {
-                        tasks.add(db.collection("users").document(link.getString("patientUid")).get());
+                        tasks.add(users.getNickname(link.getString("patientUid")));
                     }
-                    Tasks.whenAllSuccess(tasks).addOnSuccessListener(results -> {
-                        List<String> names = new ArrayList<>();
-                        for (Object o : results) {
-                            names.add(((DocumentSnapshot) o).getString("name"));
-                        }
+                    Tasks.<String>whenAllSuccess(tasks).addOnSuccessListener(names -> {
                         tvPatients.setText(String.join(", ", names) + " · 식사와 복약 기록을 공유 중입니다.");
                         btnLink.setText("연결됨");
                     });

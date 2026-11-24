@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.Timestamp;
+import com.example.mealcare.data.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -63,8 +64,8 @@ public class InviteCodeActivity extends AppCompatActivity {
         loadGuardianStatus();
 
         // 보호자 확인 화면에 보여줄 환자 이름을 먼저 읽고 코드 생성
-        db.collection("users").document(uid).get().addOnSuccessListener(doc -> {
-            patientName = doc.getString("name");
+        new UserRepository().getNickname(uid).addOnSuccessListener(name -> {
+            patientName = name;
             ((TextView) findViewById(R.id.tvHeader)).setText(patientName + "님, 안녕하세요");
             createCode(0);
         });
