@@ -1,6 +1,6 @@
 package com.example.mealcare.data;
 
-import com.example.mealcare.data.model.Permission;
+import com.example.mealcare.data.model.*;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.functions.FirebaseFunctions;
@@ -38,7 +38,7 @@ public final class InviteRepository {
 
     /**
      * 환자가 보호자 한 명에게 줄 초대를 발급합니다. 지정하지 않은 권한은 false입니다.
-     * 발급 시 서버가 정한 만료 시각은 expiresAtMillis(Unix 밀리초)에 담깁니다. 현재 유효기간은 24시간입니다.
+     * 발급 시 서버가 정한 만료 시각은 expiresAtMillis(Unix 밀리초)에 담깁니다. 코드는 영문 대문자와 숫자 중 6글자이며 발급 후 10분간 유효합니다.
      * <pre>{@code
      * Permission grants = new Permission();
      * grants.setReadMeals(true);
@@ -52,9 +52,15 @@ public final class InviteRepository {
                 .onSuccessTask(Runnable::run, result -> Tasks.forResult(new IssuedInvite(result)));
     }
 
+    /** 보호자가 확인할 환자 닉네임을 반환합니다. 이 단계에서는 코드를 사용 처리하지 않습니다. */
+    public Task<String> previewInvite(String code) {
+        return functions.call("previewInvite", Collections.singletonMap("code", code))
+                .onSuccessTask(Runnable::run, result -> Tasks.forResult(stringField(result, "nickname")));
+    }
+
     /**
      * 보호자가 수락하면 활성 연결 ID를 반환합니다. 같은 보호자가 응답을 놓쳐 다시 요청해도 연결은 하나입니다.
-     * 수락 요청은 보호자 계정당 10분에 5회까지이며 잘못 입력한 코드도 횟수에 포함됩니다.
+     * 확인과 수락 요청을 합해 보호자 계정당 10분에 5회까지이며 잘못 입력한 코드도 횟수에 포함됩니다.
      * <pre>{@code
      * Task<String> linkId = new InviteRepository().acceptInvite(code);
      * // 성공 후 new CareLinkRepository().getMyCareLinks()로 연결과 권한을 조회합니다.

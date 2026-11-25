@@ -37,6 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etPasswordConfirm = findViewById(R.id.etPasswordConfirm);
         etName = findViewById(R.id.etName);
+        etName.setHint("다른 회원에게 표시할 닉네임");
         cardPatient = findViewById(R.id.cardPatient);
         cardGuardian = findViewById(R.id.cardGuardian);
         rbPatient = findViewById(R.id.rbPatient);

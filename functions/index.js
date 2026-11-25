@@ -1,11 +1,12 @@
-const {createHash, randomBytes} = require("node:crypto");
+const crypto = require("node:crypto");
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore, FieldValue, Timestamp} = require("firebase-admin/firestore");
 const {onCall, HttpsError} = require("firebase-functions/v2/https");
 
 initializeApp();
 const db = getFirestore();
-const inviteLifetimeMs = 24 * 60 * 60 * 1000;
+const inviteLifetimeMs = 10 * 60 * 1000;
+const codeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const attemptWindowMs = 10 * 60 * 1000;
 const maxAttempts = 5;
 
@@ -33,23 +34,30 @@ function permissions(input) {
 }
 
 function hash(text) {
-  return createHash("sha256").update(text).digest("hex");
+  return crypto.createHash("sha256").update(text).digest("hex");
 }
 
 exports.createInvite = onCall(async request => {
   const uid = actor(request);
   const grants = permissions(request.data?.permissions);
-  const raw = randomBytes(12).toString("hex").toUpperCase();
-  const invite = db.collection("invites").doc(hash(raw));
-  return db.runTransaction(async tx => {
-    requireRole(await tx.get(db.collection("users").doc(uid)), "patient");
-    const now = Timestamp.now();
-    const expiresAt = Timestamp.fromMillis(now.toMillis() + inviteLifetimeMs);
-    tx.create(invite, {inviteId: invite.id, patientUid: uid, permissions: grants,
-      status: "active", createdAt: now, expiresAt});
-    // 원문은 발급 응답으로만 전달합니다. 공백 없이 네 글자씩 나눠 복사할 수 있습니다.
-    return {inviteId: invite.id, code: raw.match(/.{4}/g).join("-"), expiresAtMillis: expiresAt.toMillis()};
-  });
+  const invites = db.collection("invites");
+  // 사용·취소된 코드도 다른 환자에게 재발급하지 않습니다. 기존 앱의 원문 문서도 예약된 코드로 봅니다.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const code = Array.from({length: 6}, () => codeAlphabet[crypto.randomInt(codeAlphabet.length)]).join("");
+    const invite = invites.doc(hash(code));
+    const issued = await db.runTransaction(async tx => {
+      const [patient, existing, legacy] = await tx.getAll(db.collection("users").doc(uid), invite, invites.doc(code));
+      requireRole(patient, "patient");
+      if (existing.exists || legacy.exists) return null;
+      const now = Timestamp.now();
+      const expiresAt = Timestamp.fromMillis(now.toMillis() + inviteLifetimeMs);
+      tx.create(invite, {inviteId: invite.id, patientUid: uid, permissions: grants,
+        status: "active", createdAt: now, expiresAt});
+      return {inviteId: invite.id, code, expiresAtMillis: expiresAt.toMillis()};
+    });
+    if (issued) return issued;
+  }
+  throw new HttpsError("resource-exhausted", "새 초대 코드를 다시 요청해 주세요.");
 });
 
 // 실패한 코드도 횟수에 포함되도록 수락 트랜잭션과 별도로 커밋합니다.
@@ -67,13 +75,44 @@ async function countAttempt(uid) {
   });
 }
 
+// 확인과 수락 모두 같은 시도 제한을 적용합니다. 이전 서버가 발급한 긴 코드는 원래 만료까지 수락할 수 있습니다.
+async function requestedInvite(uid, code) {
+  await countAttempt(uid);
+  const text = typeof code === "string" && code.length <= 64 ? code.trim().toUpperCase() : "";
+  const legacy = text.replace(/[-\s]/g, "");
+  if (/^[A-HJ-NP-Z2-9]{6}$/.test(text)) return db.collection("invites").doc(hash(text));
+  if (/^[A-F0-9]{24}$/.test(legacy)) return db.collection("invites").doc(hash(legacy));
+  throw new HttpsError("invalid-argument", "초대 코드 형식을 확인해 주세요.");
+}
+
+function requireActiveInvite(data) {
+  if (data.status !== "active" || data.expiresAt.toMillis() <= Date.now()) {
+    throw new HttpsError("failed-precondition", "사용했거나 만료된 초대입니다.");
+  }
+}
+
+exports.previewInvite = onCall(async request => {
+  const uid = actor(request);
+  const invite = await requestedInvite(uid, request.data?.code);
+  return db.runTransaction(async tx => {
+    const [invitation, caregiver] = await tx.getAll(invite, db.collection("users").doc(uid));
+    requireRole(caregiver, "caregiver");
+    if (!invitation.exists) throw new HttpsError("not-found", "초대 코드를 찾을 수 없습니다.");
+    const data = invitation.data();
+    requireActiveInvite(data);
+    const [patient, profile] = await tx.getAll(db.collection("users").doc(data.patientUid),
+      db.collection("publicProfiles").doc(data.patientUid));
+    requireRole(patient, "patient");
+    const nickname = profile.get("nickname") ?? patient.get("name");
+    if (!nickname) throw new HttpsError("failed-precondition", "환자의 표시 이름을 확인할 수 없습니다.");
+    // 확인 단계에서는 환자의 이름만 전달합니다. 연결과 코드 소비는 최종 수락 시 처리합니다.
+    return {nickname};
+  });
+});
+
 exports.acceptInvite = onCall(async request => {
   const uid = actor(request);
-  await countAttempt(uid);
-  const code = request.data?.code;
-  const compact = typeof code === "string" && code.length <= 64 ? code.replace(/[-\s]/g, "").toUpperCase() : "";
-  if (!/^[A-F0-9]{24}$/.test(compact)) throw new HttpsError("invalid-argument", "초대 코드 형식을 확인해 주세요.");
-  const invite = db.collection("invites").doc(hash(compact));
+  const invite = await requestedInvite(uid, request.data?.code);
   return db.runTransaction(async tx => {
     const [invitation, caregiver] = await tx.getAll(invite, db.collection("users").doc(uid));
     requireRole(caregiver, "caregiver");
@@ -81,9 +120,7 @@ exports.acceptInvite = onCall(async request => {
     const data = invitation.data();
     // 응답을 놓친 같은 보호자의 재시도는 기존 연결 ID만 돌려줍니다.
     const retry = data.status === "used" && data.usedByUid === uid;
-    if (!retry && (data.status !== "active" || data.expiresAt.toMillis() <= Date.now())) {
-      throw new HttpsError("failed-precondition", "사용할 수 없는 초대입니다.");
-    }
+    if (!retry) requireActiveInvite(data);
     if (data.patientUid === uid) throw new HttpsError("permission-denied", "자신과 연결할 수 없습니다.");
     requireRole(await tx.get(db.collection("users").doc(data.patientUid)), "patient");
 

@@ -6,7 +6,7 @@ if (!/^(127\.0\.0\.1|localhost):\d+$/.test(process.env.FIRESTORE_EMULATOR_HOST ?
     !process.env.GCLOUD_PROJECT?.startsWith("demo-")) {
   throw new Error("로컬 Firestore 에뮬레이터와 demo- 프로젝트를 지정해 주세요.");
 }
-const {createInvite, acceptInvite, revokeInvite, updatePermissions, revokeLink} = require("..");
+const {createInvite, previewInvite, acceptInvite, revokeInvite, updatePermissions, revokeLink} = require("..");
 const {getFirestore, Timestamp} = require("firebase-admin/firestore");
 const db = getFirestore();
 after(() => db.terminate());
@@ -24,13 +24,13 @@ test("동시 수락은 한 보호자만 연결하고 응답 재시도는 같은 
   const [patient, first, second] = await Promise.all([member("patient"), member("caregiver"), member("caregiver")]);
   const issued = await call(createInvite, patient, {permissions: grants});
   const invite = db.collection("invites").doc(issued.inviteId);
-  const raw = issued.code.replaceAll("-", "");
+  const raw = issued.code;
+  assert.match(raw, /^[A-HJ-NP-Z2-9]{6}$/);
   assert.equal(issued.inviteId, createHash("sha256").update(raw).digest("hex"));
   const stored = (await invite.get()).data();
   assert.equal(stored.expiresAt.toMillis(), issued.expiresAtMillis);
-  assert.equal(stored.expiresAt.toMillis() - stored.createdAt.toMillis(), 24 * 3600_000);
-  assert.equal(JSON.stringify(stored).includes(raw), false);
-  assert.equal(JSON.stringify(stored).includes(issued.code), false);
+  assert.equal(stored.expiresAt.toMillis() - stored.createdAt.toMillis(), 10 * 60_000);
+  assert.equal(Object.values(stored).includes(raw), false);
   const result = await Promise.allSettled([first, second].map(uid => call(acceptInvite, uid, {code: raw.toLowerCase()})));
   assert.equal(result.filter(item => item.status === "fulfilled").length, 1);
   assert.equal(result.find(item => item.status === "rejected").reason.code, "failed-precondition");
@@ -44,6 +44,35 @@ test("동시 수락은 한 보호자만 연결하고 응답 재시도는 같은 
     assert.deepEqual(links.docs[0].get("permissions"), grants);
   }
   await assert.rejects(call(revokeInvite, patient, issued), failed("failed-precondition"));
+});
+
+test("코드를 확인하면 닉네임만 반환하며, 확인 후 만료되면 연결되지 않습니다", async () => {
+  const [patient, caregiver] = await Promise.all([member("patient"), member("caregiver")]);
+  await db.collection("publicProfiles").doc(patient).set({nickname: "테스트 환자"});
+  const issued = await call(createInvite, patient, {permissions: grants});
+  await assert.rejects(call(previewInvite, patient, issued), failed("permission-denied"));
+  assert.deepEqual(await call(previewInvite, caregiver, {code: issued.code.toLowerCase()}), {nickname: "테스트 환자"});
+  const invite = db.collection("invites").doc(issued.inviteId);
+  assert.equal((await invite.get()).get("status"), "active");
+  await invite.update({expiresAt: Timestamp.fromMillis(0)});
+  await assert.rejects(call(acceptInvite, caregiver, issued), failed("failed-precondition"));
+  await assert.rejects(call(previewInvite, caregiver, issued), failed("failed-precondition"));
+  assert.equal((await db.collection("careLinks").where("patientUid", "==", patient).get()).size, 0);
+});
+
+test("같은 코드가 이미 있으면 기존 초대를 보존하고 다른 코드를 발급합니다", async t => {
+  const patient = await member("patient");
+  const priorCode = "AAAAAA";
+  const prior = db.collection("invites").doc(createHash("sha256").update(priorCode).digest("hex"));
+  await prior.set({status: "revoked", patientUid: "이전 환자"});
+  const crypto = require("node:crypto");
+  const randomInt = crypto.randomInt;
+  let draws = 0;
+  t.mock.method(crypto, "randomInt", (...args) =>
+    args.length === 1 && args[0] === 32 && draws++ < 6 ? 0 : randomInt(...args));
+  const issued = await call(createInvite, patient, {permissions: grants});
+  assert.notEqual(issued.code, priorCode);
+  assert.deepEqual((await prior.get()).data(), {status: "revoked", patientUid: "이전 환자"});
 });
 
 test("재연결은 기존 ID와 최초 생성 시각·해제 이력을 보존합니다", async () => {
@@ -87,7 +116,7 @@ test("권한과 발급자를 검증하고 취소·만료된 초대는 사용할 
 test("실패한 수락도 누적되며 제한 시간이 지나면 다시 시도할 수 있습니다", async () => {
   const caregiver = await member("caregiver");
   for (let i = 0; i < 5; i++) await assert.rejects(call(acceptInvite, caregiver, {code: "?"}), failed("invalid-argument"));
-  await assert.rejects(call(acceptInvite, caregiver, {code: "?"}), failed("resource-exhausted"));
+  await assert.rejects(call(previewInvite, caregiver, {code: "?"}), failed("resource-exhausted"));
   const counter = db.collection("inviteAttempts").doc(caregiver);
   await counter.update({resetAt: Timestamp.fromMillis(0)});
   await assert.rejects(call(acceptInvite, caregiver, {code: "?"}), failed("invalid-argument"));

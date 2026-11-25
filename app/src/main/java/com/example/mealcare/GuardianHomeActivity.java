@@ -6,12 +6,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mealcare.data.CareLinkRepository;
 import com.example.mealcare.data.UserRepository;
+import com.example.mealcare.data.model.CareLink;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,8 +23,7 @@ import java.util.Locale;
 public class GuardianHomeActivity extends AppCompatActivity {
 
     private final UserRepository users = new UserRepository();
-    private FirebaseFirestore db;
-    private String uid;
+    private final CareLinkRepository careLinks = new CareLinkRepository();
     private TextView tvWelcome, tvPatients, btnLink;
 
     @Override
@@ -32,8 +31,7 @@ public class GuardianHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guardian_home);
 
-        db = FirebaseFirestore.getInstance();
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tvWelcome = findViewById(R.id.tvWelcome);
         tvPatients = findViewById(R.id.tvPatients);
         btnLink = findViewById(R.id.btnLink);
@@ -56,16 +54,16 @@ public class GuardianHomeActivity extends AppCompatActivity {
     }
 
     private void loadPatients() {
-        db.collection("links").whereEqualTo("guardianUid", uid).get()
-                .addOnSuccessListener(qs -> {
-                    if (qs.isEmpty()) {
+        careLinks.getMyCareLinks()
+                .addOnSuccessListener(links -> {
+                    if (links.isEmpty()) {
                         tvPatients.setText("아직 연결된 환자가 없습니다. 초대 코드를 입력하세요.");
                         btnLink.setText("연결하기");
                         return;
                     }
                     List<Task<String>> tasks = new ArrayList<>();
-                    for (DocumentSnapshot link : qs.getDocuments()) {
-                        tasks.add(users.getNickname(link.getString("patientUid")));
+                    for (CareLink link : links) {
+                        tasks.add(users.getNickname(link.getPatientUid()));
                     }
                     Tasks.<String>whenAllSuccess(tasks).addOnSuccessListener(names -> {
                         tvPatients.setText(String.join(", ", names) + " · 식사와 복약 기록을 공유 중입니다.");
