@@ -11,25 +11,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mealcare.data.UserRepository;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/** 2.1 회원가입: Authentication 계정 생성 + Firestore users/{uid}에 이름·역할 저장 */
+/** Authentication 계정 생성 후 회원 정보와 공개 프로필을 함께 등록합니다. */
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword, etPasswordConfirm, etName;
     private LinearLayout cardPatient, cardGuardian;
     private RadioButton rbPatient, rbGuardian;
     private Button btnSignUp;
-    private String role = "patient";
+    private String role = UserRepository.ROLE_PATIENT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etPasswordConfirm = findViewById(R.id.etPasswordConfirm);
         etName = findViewById(R.id.etName);
+        etName.setHint("다른 회원에게 표시할 닉네임");
         cardPatient = findViewById(R.id.cardPatient);
         cardGuardian = findViewById(R.id.cardGuardian);
         rbPatient = findViewById(R.id.rbPatient);
@@ -47,17 +45,17 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btnSignUp);
 
         // 계정 유형 카드를 누르면 선택 (screen_01 계정 유형 선택 디자인)
-        cardPatient.setOnClickListener(v -> selectRole("patient"));
-        cardGuardian.setOnClickListener(v -> selectRole("guardian"));
+        cardPatient.setOnClickListener(v -> selectRole(UserRepository.ROLE_PATIENT));
+        cardGuardian.setOnClickListener(v -> selectRole(UserRepository.ROLE_CAREGIVER));
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         btnSignUp.setOnClickListener(v -> signUp());
 
-        selectRole("patient");
+        selectRole(UserRepository.ROLE_PATIENT);
     }
 
     private void selectRole(String newRole) {
         role = newRole;
-        boolean isPatient = "patient".equals(role);
+        boolean isPatient = UserRepository.ROLE_PATIENT.equals(role);
         rbPatient.setChecked(isPatient);
         rbGuardian.setChecked(!isPatient);
         cardPatient.setBackgroundResource(isPatient ? R.drawable.mc_card_outline : R.drawable.mc_card);
@@ -90,12 +88,26 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         btnSignUp.setEnabled(false);
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener(result -> saveUser(result.getUser(), name, email, role))
+        String selectedRole = role;
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(result -> saveUser(result.getUser(), name, selectedRole))
                 .addOnFailureListener(e -> {
                     btnSignUp.setEnabled(true);
                     if (e instanceof FirebaseAuthUserCollisionException) {
-                        toast("이미 가입된 이메일입니다.");
+                        // Auth만 생성된 뒤 저장이 실패했으면 같은 계정을 확인하고 문서 생성을 재시도합니다.
+                        FirebaseUser current = auth.getCurrentUser();
+                        if (current == null || !email.equalsIgnoreCase(current.getEmail())) {
+                            toast("이미 가입된 이메일입니다. 로그인해 주세요.");
+                            return;
+                        }
+                        btnSignUp.setEnabled(false);
+                        current.reauthenticate(EmailAuthProvider.getCredential(email, password))
+                                .addOnSuccessListener(unused -> saveUser(current, name, selectedRole))
+                                .addOnFailureListener(error -> {
+                                    btnSignUp.setEnabled(true);
+                                    toast("계정 확인 실패: " + error.getMessage());
+                                });
                     } else if (e instanceof FirebaseAuthWeakPasswordException) {
                         toast("비밀번호가 너무 약합니다.");
                     } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
@@ -106,25 +118,15 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void saveUser(FirebaseUser user, String name, String email, String role) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        data.put("email", email);
-        data.put("role", role);
-        data.put("createdAt", FieldValue.serverTimestamp());
-
-        FirebaseFirestore.getInstance()
-                .collection("users").document(user.getUid())
-                .set(data)
+    private void saveUser(FirebaseUser user, String name, String selectedRole) {
+        new UserRepository().createProfile(user.getUid(), selectedRole, name)
                 .addOnSuccessListener(unused -> {
                     toast("가입이 완료되었습니다.");
                     AuthRouter.goHome(this, user.getUid(), () -> btnSignUp.setEnabled(true));
                 })
                 .addOnFailureListener(e -> {
-                    // users 문서 저장에 실패하면 역할 없는 계정이 남지 않도록 계정도 지운다
-                    user.delete();
                     btnSignUp.setEnabled(true);
-                    toast("가입 실패: " + e.getMessage());
+                    toast("회원 정보 저장 실패: " + e.getMessage());
                 });
     }
 

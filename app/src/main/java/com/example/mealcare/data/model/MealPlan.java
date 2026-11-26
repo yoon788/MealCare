@@ -2,6 +2,7 @@ package com.example.mealcare.data.model;
 
 import com.google.firebase.Timestamp;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +91,23 @@ public class MealPlan {
         return reminderSettings;
     }
 
+    /** Firestore 문서를 읽을 때 사용합니다. 계획을 만들 때는 {@link #configureReminder(boolean, int)}를 사용하세요. */
     public void setReminderSettings(Map<String, Object> reminderSettings) {
         this.reminderSettings = reminderSettings;
+    }
+
+    /**
+     * 식사 계획에 알림 사용 여부와 식사 예정 시각을 기준으로 한 시간차(분)를 설정합니다.
+     * 음수는 식사 전, 0은 식사 시각, 양수는 식사 후입니다.
+     * <pre>{@code
+     * mealPlan.configureReminder(true, -10);  // 식사 10분 전에 알림
+     * }</pre>
+     */
+    public void configureReminder(boolean enabled, int offsetMinutes) {
+        Map<String, Object> settings = new HashMap<>();
+        settings.put("alarmEnabled", enabled);
+        settings.put("offsetMinutes", (long) offsetMinutes);
+        setReminderSettings(settings);
     }
 
     public String getStatus() {

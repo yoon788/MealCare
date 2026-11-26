@@ -33,14 +33,16 @@ erDiagram
         string patientUid FK
         string usedByUid FK "사용 전 비어 있음"
     }
-    drug["약품"] {
-        string drugId PK
+    drug["식약처 약품 (API)"] {
+        string sourceItemId PK "품목기준코드"
         string productName
     }
     medicationPlan["복약 계획"] {
         string planId PK
         string patientUid FK
-        string drugId FK
+        string sourceItemId "식약처 품목기준코드"
+        string drugName "등록 당시 제품명"
+        string drugId "이전 계획의 내부 ID"
         json doseSlots "회차별 선택적 mealPlanId 참조"
     }
     mealPlan["식사 계획"] {
@@ -82,7 +84,7 @@ erDiagram
     member |o..o{ invite : "사용 usedByUid"
     member ||..o{ medicationPlan : "소유 patientUid"
     member ||..o{ mealPlan : "소유 patientUid"
-    drug ||..o{ medicationPlan : "약품 drugId"
+    drug |o..o{ medicationPlan : "신규 계획의 필수 sourceItemId"
     medicationPlan ||--o{ medicationRecord : "계획 planId"
     mealPlan ||--o{ mealRecord : "계획 mealPlanId"
     mealPlan }o..o{ medicationPlan : "회차별 선택적 식사연동"

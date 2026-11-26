@@ -5,34 +5,28 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.Timestamp;
+import com.example.mealcare.data.CareLinkRepository;
+import com.example.mealcare.data.InviteRepository;
+import com.example.mealcare.data.UserRepository;
+import com.example.mealcare.data.model.Permission;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-/** 2.2 환자: 초대 코드 생성 (screen_04 디자인, invites/{code}, 10분 뒤 만료) */
+/** 환자에게 서버가 발급한 초대 코드와 만료 시각을 표시합니다. */
 public class InviteCodeActivity extends AppCompatActivity {
-
-    private static final long EXPIRE_MILLIS = 10 * 60 * 1000; // 10분
-    private static final int MAX_TRY = 5;
-    // 헷갈리는 글자(0, O, 1, I)는 뺀 영문 대문자 + 숫자
-    private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-    private final SecureRandom random = new SecureRandom();
-    private FirebaseFirestore db;
+    private final InviteRepository invites = new InviteRepository();
+    private long expiresAtMillis;
     private String uid;
     private String patientName;
     private String currentCode;
@@ -44,7 +38,6 @@ public class InviteCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_code);
 
-        db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tvCode = findViewById(R.id.tvCode);
         tvCodeBg = findViewById(R.id.tvCodeBg);
@@ -63,76 +56,83 @@ public class InviteCodeActivity extends AppCompatActivity {
         loadGuardianStatus();
 
         // 보호자 확인 화면에 보여줄 환자 이름을 먼저 읽고 코드 생성
-        db.collection("users").document(uid).get().addOnSuccessListener(doc -> {
-            patientName = doc.getString("name");
+        new UserRepository().getNickname(uid).addOnSuccessListener(name -> {
+            patientName = name;
             ((TextView) findViewById(R.id.tvHeader)).setText(patientName + "님, 안녕하세요");
-            createCode(0);
-        });
+            if (savedInstanceState != null && uid.equals(savedInstanceState.getString("issuerUid"))
+                    && savedInstanceState.getString("inviteCode") != null
+                    && savedInstanceState.getLong("expiresAt") > System.currentTimeMillis()) {
+                showCode(savedInstanceState.getString("inviteCode"), savedInstanceState.getLong("expiresAt"));
+            } else {
+                createCode();
+            }
+        }).addOnFailureListener(e -> tvExpire.setText("환자 정보 조회 실패: " + e.getMessage()));
     }
 
     /** 뒤에 보이는 '보호자 연결 상태' 카드 채우기 */
     private void loadGuardianStatus() {
         TextView tvStatus = findViewById(R.id.tvGuardianStatus);
         TextView tvChip = findViewById(R.id.tvGuardianChip);
-        db.collection("links").whereEqualTo("patientUid", uid).get().addOnSuccessListener(qs -> {
-            if (qs.isEmpty()) {
+        new CareLinkRepository().getMyCareLinks().addOnSuccessListener(links -> {
+            if (links.isEmpty()) {
                 tvStatus.setText("아직 연결된 보호자가 없습니다.");
                 tvChip.setText("미연결");
             } else {
-                tvStatus.setText("보호자 " + qs.size() + "명과 기록을 공유하고 있습니다.");
+                tvStatus.setText("보호자 " + links.size() + "명과 기록을 공유하고 있습니다.");
                 tvChip.setText("연결됨");
             }
         });
     }
 
-    private String randomCode() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            sb.append(CHARS.charAt(random.nextInt(CHARS.length())));
-        }
-        return sb.toString();
-    }
-
-    private void createCode(int attempt) {
-        if (attempt >= MAX_TRY) {
-            toast("코드를 만들지 못했습니다. 다시 시도해 주세요.");
+    private void createCode() {
+        // 화면에 표시된 조회 범위만 초대에 담습니다. 대리 기록 권한은 부여하지 않습니다.
+        CheckBox meals = sharingOption("식사 및 결식 기록");
+        CheckBox medications = sharingOption("복약 기록");
+        if (meals == null || medications == null) {
+            tvExpire.setText("공유 범위를 확인할 수 없어 코드를 발급하지 못했습니다.");
             return;
         }
+        Permission grants = new Permission();
+        grants.setReadMeals(meals.isChecked());
+        grants.setReadMedications(medications.isChecked());
+        invites.createInvite(grants)
+                .addOnSuccessListener(issued -> showCode(issued.code, issued.expiresAtMillis))
+                .addOnFailureListener(e -> tvExpire.setText("초대 코드 발급 실패: " + e.getMessage()));
+    }
 
-        String code = randomCode();
-        DocumentReference ref = db.collection("invites").document(code);
-
-        ref.get().addOnSuccessListener(snap -> {
-            // 같은 코드가 아직 살아 있으면(미사용 + 미만료) 다른 코드로 다시 시도
-            if (snap.exists()) {
-                Timestamp exp = snap.getTimestamp("expiresAt");
-                boolean used = Boolean.TRUE.equals(snap.getBoolean("used"));
-                boolean expired = exp == null || exp.toDate().before(new Date());
-                if (!used && !expired) {
-                    createCode(attempt + 1);
-                    return;
-                }
+    // 기존 레이아웃의 공유 체크박스에는 ID가 없어 정확한 표시 문구로 찾습니다.
+    private CheckBox sharingOption(String label) {
+        ArrayList<View> matches = new ArrayList<>();
+        findViewById(android.R.id.content).findViewsWithText(matches, label, View.FIND_VIEWS_WITH_TEXT);
+        CheckBox option = null;
+        for (View view : matches) {
+            if (view instanceof CheckBox && label.contentEquals(((CheckBox) view).getText())) {
+                if (option != null) return null;
+                option = (CheckBox) view;
             }
+        }
+        return option;
+    }
 
-            Date expiresAt = new Date(System.currentTimeMillis() + EXPIRE_MILLIS);
-            Map<String, Object> data = new HashMap<>();
-            data.put("patientUid", uid);
-            data.put("patientName", patientName);
-            data.put("createdAt", FieldValue.serverTimestamp());
-            data.put("expiresAt", new Timestamp(expiresAt));
-            data.put("used", false);
+    private void showCode(String code, long expiresAt) {
+        currentCode = code;
+        expiresAtMillis = expiresAt;
+        tvCode.setText(code);
+        tvCodeBg.setText(code);
+        tvExpire.setText(expiryTime() + "까지 사용할 수 있습니다. (발급 후 10분)");
+        setButtonsEnabled(true);
+    }
 
-            ref.set(data)
-                    .addOnSuccessListener(unused -> {
-                        currentCode = code;
-                        tvCode.setText(code);
-                        tvCodeBg.setText(code);
-                        String time = new SimpleDateFormat("HH:mm", Locale.KOREA).format(expiresAt);
-                        tvExpire.setText(time + "까지 사용할 수 있습니다. (10분)");
-                        setButtonsEnabled(true);
-                    })
-                    .addOnFailureListener(e -> toast("코드 저장 실패: " + e.getMessage()));
-        }).addOnFailureListener(e -> toast("네트워크 오류: " + e.getMessage()));
+    private String expiryTime() {
+        return new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date(expiresAtMillis));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putString("issuerUid", uid);
+        state.putString("inviteCode", currentCode);
+        state.putLong("expiresAt", expiresAtMillis);
     }
 
     private void copyCode() {
@@ -145,7 +145,7 @@ public class InviteCodeActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT,
-                "[MealCare] " + patientName + "님의 보호자 초대 코드: " + currentCode + "\n10분 안에 앱에서 입력해 주세요.");
+                "[MealCare] " + patientName + "님의 보호자 초대 코드: " + currentCode + "\n" + expiryTime() + "까지 앱에서 입력해 주세요.");
         startActivity(Intent.createChooser(intent, "초대 코드 공유"));
     }
 

@@ -12,4 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
+/firebase-debug*.log
+/firestore-debug*.log
+/.firebase/
 local.properties

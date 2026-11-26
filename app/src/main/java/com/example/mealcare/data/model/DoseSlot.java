@@ -1,5 +1,7 @@
 package com.example.mealcare.data.model;
 
+import com.example.mealcare.data.local.ReminderDoseSlot;
+
 import java.util.List;
 
 public class DoseSlot {
@@ -13,6 +15,23 @@ public class DoseSlot {
     private Integer offsetMinutes;    //복용 시간, 식전 30분은 -30, 식후 30분은 30
 
     public DoseSlot() {}
+
+    public ReminderDoseSlot toReminderSlot(String patientUid, String planId) {
+        ReminderDoseSlot row = new ReminderDoseSlot(patientUid, planId, slotId);
+        row.doseAmount = doseAmount;
+        row.doseUnit = doseUnit;
+        for (int day : daysOfWeek) {
+            if (day < 1 || day > 7) {
+                throw new IllegalArgumentException("요일은 1~7(1부터 월요일, 7은 일요일)이어야 합니다.");
+            }
+            row.weekdaysMask |= 1 << (day - 1);
+        }
+        row.timingType = timingType;
+        row.localTime = localTime;
+        row.mealPlanId = mealPlanId;
+        row.offsetMinutes = offsetMinutes;
+        return row;
+    }
 
     public String getSlotId() {
         return slotId;

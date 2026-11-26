@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.mealcare.data.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * 로그인된 사용자의 역할을 읽어서 환자 홈 / 보호자 홈으로 보내주는 도우미.
@@ -14,14 +14,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class AuthRouter {
 
     public static void goHome(Activity activity, String uid, Runnable onFail) {
-        FirebaseFirestore.getInstance()
-                .collection("users").document(uid).get()
-                .addOnSuccessListener(doc -> {
-                    String role = doc.getString("role");
+        new UserRepository().getLoginRole(uid)
+                .addOnSuccessListener(role -> {
                     Class<?> target;
-                    if ("guardian".equals(role)) {
+                    if (UserRepository.ROLE_CAREGIVER.equals(role)) {
                         target = GuardianHomeActivity.class;
-                    } else if ("patient".equals(role)) {
+                    } else if (UserRepository.ROLE_PATIENT.equals(role)) {
                         target = PatientHomeActivity.class;
                     } else {
                         Toast.makeText(activity, "계정 정보를 찾을 수 없습니다. 다시 로그인해 주세요.",
@@ -36,7 +34,7 @@ public class AuthRouter {
                     activity.finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(activity, "네트워크 오류: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "회원 정보 조회 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     if (onFail != null) onFail.run();
                 });
     }
